@@ -1,16 +1,16 @@
 import { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Figtree } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import "@/app/globals.css"
 import { TRPCProvider } from "@/trpc/client"
 
-const inter = Inter({
+const figtree = Figtree({
   subsets: ["latin"],
   display: "swap",
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
   style: ["italic", "normal"],
-  variable: "--font-inter",
+  variable: "--font-figtree",
 })
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ const RootLayout = ({
   children,
 }: RootLayoutProps) => {
   return (
-    <html className={cn("h-full min-w-[360px] text-sm lg:text-base antialiased scheme-dark bg-black text-white", inter.className)} lang="en" suppressHydrationWarning>
+    <html className={cn("h-full min-w-[360px] text-sm lg:text-base antialiased scheme-dark bg-background text-white", figtree.className)} lang="en" suppressHydrationWarning>
       <body className="h-full antialiased">
         <TRPCProvider>{children}</TRPCProvider>
       </body>
