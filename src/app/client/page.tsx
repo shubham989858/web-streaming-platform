@@ -7,9 +7,7 @@ import { TempClient } from "@/app/client/temp-client"
 export const dynamic = "force-dynamic"
 
 const ClientPage = async () => {
-    void trpc.hello.prefetch({
-        text: "Shubham",
-    })
+    void trpc.articles.getAll.prefetch()
 
     return (
         <HydrateClient>

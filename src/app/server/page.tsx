@@ -1,12 +1,10 @@
 import { trpc } from "@/trpc/server"
 
 const ServerPage = async () => {
-    const data = await trpc.hello({
-        text: "Shubham",
-    })
+    const data = await trpc.articles.getAll()
 
     return (
-        <div>{data.greeting}</div>
+        <div>{JSON.stringify(data)}</div>
     )
 }
 

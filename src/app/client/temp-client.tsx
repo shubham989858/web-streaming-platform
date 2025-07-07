@@ -3,11 +3,9 @@
 import { trpc } from "@/trpc/client"
 
 export const TempClient = () => {
-    const [data] = trpc.hello.useSuspenseQuery({
-        text: "Shubham",
-    })
+    const [data] = trpc.articles.getAll.useSuspenseQuery()
 
     return (
-        <div>{data.greeting}</div>
+        <div>{JSON.stringify(data)}</div>
     )
 }

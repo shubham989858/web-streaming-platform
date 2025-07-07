@@ -1,6 +1,11 @@
-const HomePage = () => {
+import { db } from "@/db"
+import { articles } from "@/db/schema"
+
+const HomePage = async () => {
+  const allArticles = await db.select().from(articles)
+
   return (
-    <div>HomePage</div>
+    <div>{JSON.stringify(allArticles)}</div>
   )
 }
 
