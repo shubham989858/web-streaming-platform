@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 
 import { cn } from "@/lib/utils"
 import "@/app/globals.css"
+import { TRPCProvider } from "@/trpc/client"
 
 const inter = Inter({
   subsets: ["latin"],
@@ -25,7 +26,9 @@ const RootLayout = ({
 }: RootLayoutProps) => {
   return (
     <html className={cn("h-full min-w-[360px] text-sm lg:text-base antialiased scheme-dark bg-black text-white", inter.className)} lang="en" suppressHydrationWarning>
-      <body className="h-full antialiased">{children}</body>
+      <body className="h-full antialiased">
+        <TRPCProvider>{children}</TRPCProvider>
+      </body>
     </html>
   )
 }
