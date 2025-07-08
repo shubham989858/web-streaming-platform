@@ -5,11 +5,12 @@ import { cva, VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-const buttonVariants = cva("cursor-pointer w-fit flex items-center justify-center font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-background", {
+export const buttonVariants = cva("cursor-pointer w-fit flex items-center justify-center font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white focus-visible:ring-offset-background", {
     variants: {
         variant: {
             default: "text-slate-950 bg-white hover:text-slate-950/80 hover:bg-white/80",
             primary: "text-white bg-pluto hover:text-white/80 hover:bg-pluto/80",
+            ghost: "text-white/80 hover:text-white hover:bg-white/10",
         },
         size: {
             sm: "h-8 px-3 rounded-md text-xs gap-x-1.5",

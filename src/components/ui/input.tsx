@@ -12,6 +12,7 @@ type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
     label: string,
     id: string,
     type?: AllowedInputTypes,
+    disabled?: boolean,
     errorMessage?: string,
     errorMessageClassName?: string,
 }
