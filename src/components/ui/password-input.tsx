@@ -56,6 +56,6 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(({
                 )
             }
 
-        </div >
+        </div>
     )
 })

@@ -27,3 +27,14 @@ export const signUpFormSchema = z.object({
         message: "Password must contain at least one special character.",
     }),
 })
+
+export const signInFormSchema = z.object({
+    email: z.string().nonempty({
+        message: "Email is required.",
+    }).email({
+        message: "Email is invalid.",
+    }),
+    password: z.string().nonempty({
+        message: "Password is required.",
+    }),
+})
