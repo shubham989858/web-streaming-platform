@@ -142,13 +142,13 @@ export const SecurityCodeInput = ({
                 <div className="flex items-center gap-x-2">
 
                     {valueArray.map((item, index) => (
-                        <input className="flex-1 text-sm text-white w-full h-10 text-center px-3 rounded-lg border border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/80 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none" key={index} id={id} name={id} value={item} onChange={(e) => onChange(e, index)} onKeyDown={(e) => onKeyDown(e, index)} onPaste={(e) => onPaste(e, index)} type="text" disabled={disabled} maxLength={1} inputMode={inputMode} autoComplete="one-time-code" pattern={inputPattern} ref={(e) => {
+                        <input className="flex-1 text-sm text-white w-full h-10 text-center px-3 rounded-lg border border-zinc-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-white/80 focus-visible:ring-offset-background disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none" key={index} id={`${id}${index + 1}`} name={`${id}${index + 1}`} value={item} onChange={(e) => onChange(e, index)} onKeyDown={(e) => onKeyDown(e, index)} onPaste={(e) => onPaste(e, index)} type="text" disabled={disabled} maxLength={1} inputMode={inputMode} autoComplete="one-time-code" pattern={inputPattern} ref={(e) => {
                             inputRefs.current[index] = e
                         }} />
                     ))}
 
                 </div>
-                <label className={cn("font-medium block pb-3 text-white/80 group-hover:text-white transition-all group-focus-within:text-white", disabled && "group-hover:text-white/80", labelClassName)} htmlFor={id}>{label}</label>
+                <label className={cn("font-medium block pb-3 text-white/80 group-hover:text-white transition-all group-focus-within:text-white", disabled && "group-hover:text-white/80", labelClassName)} htmlFor={`${id}1`}>{label}</label>
             </div>
 
             {!!errorMessage && (

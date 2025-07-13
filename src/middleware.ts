@@ -9,6 +9,8 @@ const isAuthRoute = createRouteMatcher([
     "/sign-in(.*)",
     "/sign-up(.*)",
     "/sso-callback(.*)",
+    "/reset-password(.*)",
+    "/forgot-password(.*)",
 ])
 
 const isProtectedRoute = createRouteMatcher([
