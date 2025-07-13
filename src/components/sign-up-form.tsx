@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { GoogleAuthButton } from "@/components/google-auth-button"
+import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
 
 export const splitName = (fullName: string) => {
     const trimmedFullName = fullName.trim().replace(/\s+/g, " ")
@@ -77,6 +78,8 @@ export const SignUpForm = () => {
             await signUp.prepareEmailAddressVerification({
                 strategy: "email_code",
             })
+
+            localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
 
             return router.push("/sign-up/verify-email")
         } catch (error: any) {

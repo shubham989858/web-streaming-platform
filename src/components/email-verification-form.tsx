@@ -9,13 +9,12 @@ import { useSignUp } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { useLocalStorage } from "usehooks-ts"
 
+import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
 import { emailVerificationFormSchema } from "@/lib/form-schemas"
 import { SecurityCodeInput } from "@/components/ui/security-code-input"
 import { Button } from "@/components/ui/button"
 
 const RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER = 30
-
-const RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY = "resend-email-verification-code-cooldown-timer"
 
 export const EmailVerificationForm = () => {
     const [isMounted, setIsMounted] = useState(false)
