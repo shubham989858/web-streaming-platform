@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { IconLoader2 } from "@tabler/icons-react"
 import { useState } from "react"
+import { useSignUp } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 
 import { signUpFormSchema } from "@/lib/form-schemas"
 import { Button } from "@/components/ui/button"
@@ -12,7 +14,36 @@ import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { GoogleAuthButton } from "@/components/google-auth-button"
 
+export const splitName = (fullName: string) => {
+    const trimmedFullName = fullName.trim().replace(/\s+/g, " ")
+
+    if (!trimmedFullName) {
+        return {
+            firstName: "",
+            lastName: "",
+        }
+    }
+
+    const nameParts = trimmedFullName.split(" ")
+
+    if (nameParts.length === 1) {
+        return {
+            firstName: nameParts[0],
+            lastName: "",
+        }
+    }
+
+    return {
+        firstName: nameParts[0],
+        lastName: nameParts.slice(1).join(" "),
+    }
+}
+
 export const SignUpForm = () => {
+    const router = useRouter()
+
+    const { isLoaded, signUp, setActive } = useSignUp()
+
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
     const [hidden, setHidden] = useState(true)
@@ -29,16 +60,31 @@ export const SignUpForm = () => {
     const onSubmit = form.handleSubmit(async (data) => {
         setHidden(true)
 
+        if (!isLoaded) {
+            return
+        }
+
         try {
-            await new Promise((resolve) => setTimeout(resolve, 5000))
+            const { firstName, lastName } = splitName(data.name)
 
-            return console.log(data)
-        } catch (error) {
-            console.log("Something went wrong.")
+            await signUp.create({
+                firstName,
+                lastName,
+                emailAddress: data.email,
+                password: data.password,
+            })
 
-            console.log(error)
+            await signUp.prepareEmailAddressVerification({
+                strategy: "email_code",
+            })
 
-            throw new Error("Something went wrong.")
+            return router.push("/sign-up/verify-email")
+        } catch (error: any) {
+            const errorMessage = error.errors?.[0]?.message || "Something went wrong."
+
+            console.log(errorMessage)
+
+            throw new Error(errorMessage)
         }
     })
 

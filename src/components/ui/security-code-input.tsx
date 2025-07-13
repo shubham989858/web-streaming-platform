@@ -4,8 +4,6 @@ import { useRef } from "react"
 
 import { cn } from "@/lib/utils"
 
-type SecurityCodeInputType = "numeric" | "alphanumeric" | "alphanumeric-uppercase"
-
 type SecurityCodeInputProps = {
     wrapperClassName?: string,
     labelClassName?: string,

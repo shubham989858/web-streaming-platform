@@ -3,10 +3,10 @@
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { IconLoader2 } from "@tabler/icons-react"
 
 import { Button } from "@/components/ui/button"
 import { SecurityCodeInput } from "@/components/ui/security-code-input"
-import { IconLoader2 } from "@tabler/icons-react"
 
 const SECURITY_CODE_LENGTH = 6
 

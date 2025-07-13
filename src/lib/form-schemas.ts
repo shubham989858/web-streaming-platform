@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { validateSecurityCode } from "@/lib/utils"
+
 export const signUpFormSchema = z.object({
     name: z.string().nonempty({
         message: "Name is required.",
@@ -25,6 +27,16 @@ export const signUpFormSchema = z.object({
         message: "Password must contain at least one digit.",
     }).regex(/[!@#$%^&*()_\-+={}[\]|:;"'<>,.?/~`]/, {
         message: "Password must contain at least one special character.",
+    }),
+})
+
+export const emailVerificationFormSchema = z.object({
+    verificationCode: z.string().nonempty({
+        message: "Verification code is required.",
+    }).length(6, {
+        message: "Verification code must be exactly 6 characters long.",
+    }).refine((value) => validateSecurityCode(value), {
+        message: "Verification code is invalid.",
     }),
 })
 

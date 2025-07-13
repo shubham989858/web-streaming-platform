@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import { Figtree } from "next/font/google"
+import { ClerkProvider } from "@clerk/nextjs"
 
 import { cn } from "@/lib/utils"
 import "@/app/globals.css"
@@ -25,11 +26,13 @@ const RootLayout = ({
   children,
 }: RootLayoutProps) => {
   return (
-    <html className={cn("h-full min-w-[360px] text-sm lg:text-base antialiased scheme-dark bg-background text-white", figtree.className)} lang="en" suppressHydrationWarning>
-      <body className="h-full antialiased">
-        <TRPCProvider>{children}</TRPCProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html className={cn("h-full min-w-[360px] text-sm lg:text-base antialiased scheme-dark bg-background text-white", figtree.className)} lang="en" suppressHydrationWarning>
+        <body className="h-full antialiased">
+          <TRPCProvider>{children}</TRPCProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
 

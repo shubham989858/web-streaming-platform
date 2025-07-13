@@ -1,0 +1,1 @@
+type SecurityCodeInputType = "numeric" | "alphanumeric" | "alphanumeric-uppercase"
