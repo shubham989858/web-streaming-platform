@@ -118,7 +118,7 @@ export const SignInForm = () => {
             </div>
             <div className="space-y-4">
                 <GoogleAuthButton showSpinner={isGoogleLoading} disabled={form.formState.isSubmitting || isGoogleLoading} onClick={onGoogleButtonClick} />
-                <ButtonLink className="w-full" size="lg" variant="ghost" href="reset-password">Forgot password?</ButtonLink>
+                <ButtonLink className="w-full" size="lg" variant="ghost" href="/forgot-password">Forgot password?</ButtonLink>
             </div>
         </form>
     )

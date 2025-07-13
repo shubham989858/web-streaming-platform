@@ -50,3 +50,11 @@ export const signInFormSchema = z.object({
         message: "Password is required.",
     }),
 })
+
+export const requestPasswordResetFormSchema = z.object({
+    email: z.string().nonempty({
+        message: "Email is required.",
+    }).email({
+        message: "Email is invalid.",
+    }),
+})
