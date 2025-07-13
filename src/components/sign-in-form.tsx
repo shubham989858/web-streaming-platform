@@ -70,16 +70,22 @@ export const SignInForm = () => {
 
         setIsGoogleLoading(true)
 
+        if (!isLoaded) {
+            return
+        }
+
         try {
-            await new Promise((resolve) => setTimeout(resolve, 5000))
+            return await signIn.authenticateWithRedirect({
+                strategy: "oauth_google",
+                redirectUrl: "/sso-callback",
+                redirectUrlComplete: "/",
+            })
+        } catch (error: any) {
+            const errorMessage = error.errors?.[0]?.message || "Something went wrong."
 
-            return console.log("google")
-        } catch (error) {
-            console.log("Something went wrong.")
+            console.log(errorMessage)
 
-            console.log(error)
-
-            throw new Error("Something went wrong.")
+            throw new Error(errorMessage)
         } finally {
             setIsGoogleLoading(false)
         }
