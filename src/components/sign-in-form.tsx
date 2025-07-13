@@ -8,6 +8,7 @@ import { useState } from "react"
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 
+import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
 import { signInFormSchema } from "@/lib/form-schemas"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -50,6 +51,8 @@ export const SignInForm = () => {
                     session: result.createdSessionId,
                 })
 
+                localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
+
                 return router.push("/")
             }
         } catch (error: any) {
@@ -75,6 +78,8 @@ export const SignInForm = () => {
         }
 
         try {
+            localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
+
             return await signIn.authenticateWithRedirect({
                 strategy: "oauth_google",
                 redirectUrl: "/sso-callback",

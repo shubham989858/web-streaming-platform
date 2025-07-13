@@ -105,6 +105,8 @@ export const SignUpForm = () => {
         }
 
         try {
+            localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
+
             return await signUp.authenticateWithRedirect({
                 strategy: "oauth_google",
                 redirectUrl: "/sso-callback",
