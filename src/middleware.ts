@@ -1,6 +1,39 @@
-import { clerkMiddleware } from "@clerk/nextjs/server"
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
+import { NextResponse } from "next/server"
 
-export default clerkMiddleware()
+const isApiRoute = createRouteMatcher([
+    "/api(.*)",
+])
+
+const isAuthRoute = createRouteMatcher([
+    "/sign-in(.*)",
+    "/sign-up(.*)",
+    "/sso-callback(.*)",
+])
+
+const isProtectedRoute = createRouteMatcher([
+    "/protected(.*)",
+])
+
+export default clerkMiddleware(async (auth, req) => {
+    const { userId } = await auth()
+
+    const isSignedIn = !!userId
+
+    if (isApiRoute(req)) {
+        return NextResponse.next()
+    }
+
+    if (isAuthRoute(req) && isSignedIn) {
+        return NextResponse.redirect(new URL("/", req.nextUrl))
+    }
+
+    if (isProtectedRoute(req) && !isSignedIn) {
+        return NextResponse.redirect(new URL("/sign-in", req.nextUrl))
+    }
+
+    return NextResponse.next()
+})
 
 export const config = {
     matcher: [
