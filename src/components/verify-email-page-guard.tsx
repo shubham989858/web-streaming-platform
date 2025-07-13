@@ -24,7 +24,7 @@ export const VerifyEmailPageGuard = ({
         }
 
         if (signUp.status !== "missing_requirements") {
-            return router.replace("/sign-up")
+            return router.back()
         }
 
         setIsLoading(false)

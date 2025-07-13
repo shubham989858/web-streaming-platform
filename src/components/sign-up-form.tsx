@@ -134,7 +134,7 @@ export const SignUpForm = () => {
                     {form.formState.isSubmitting ? (
                         <IconLoader2 className="size-6 animate-spin transition-all" />
                     ) : (
-                        "Continue"
+                        "Sign up"
                     )}
 
                 </Button>

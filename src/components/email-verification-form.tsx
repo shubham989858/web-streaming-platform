@@ -114,7 +114,7 @@ export const EmailVerificationForm = () => {
                 {form.formState.isSubmitting ? (
                     <IconLoader2 className="size-6 animate-spin transition-all" />
                 ) : (
-                    "Continue"
+                    "Verify email"
                 )}
 
             </Button>

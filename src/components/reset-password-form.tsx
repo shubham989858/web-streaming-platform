@@ -4,7 +4,7 @@ import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { IconLoader2 } from "@tabler/icons-react"
-import { useSignIn } from "@clerk/nextjs"
+import { useClerk, useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -15,6 +15,8 @@ import { PasswordInput } from "@/components/ui/password-input"
 import { ButtonLink } from "@/components/ui/button-link"
 
 export const ResetPasswordForm = () => {
+    const { signOut } = useClerk()
+
     const [hidden, setHidden] = useState(true)
 
     const router = useRouter()
@@ -44,6 +46,8 @@ export const ResetPasswordForm = () => {
             })
 
             if (result.status === "complete") {
+                await signOut()
+
                 return router.push("/sign-in")
             }
         } catch (error: any) {
@@ -74,7 +78,7 @@ export const ResetPasswordForm = () => {
                 )}
 
             </Button>
-            <ButtonLink className="w-full" size="lg" variant="ghost" href="/forgot-password">Didn’t get the code? Go back and try again</ButtonLink>
+            <ButtonLink className="w-full" size="lg" variant="ghost" href="/forgot-password">No code? Let’s roll it back</ButtonLink>
         </form>
     )
 }
