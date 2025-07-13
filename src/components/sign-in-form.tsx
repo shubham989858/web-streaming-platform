@@ -5,6 +5,8 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { IconLoader2 } from "@tabler/icons-react"
 import { useState } from "react"
+import { useSignIn } from "@clerk/nextjs"
+import { useRouter } from "next/navigation"
 
 import { signInFormSchema } from "@/lib/form-schemas"
 import { Button } from "@/components/ui/button"
@@ -14,6 +16,10 @@ import { GoogleAuthButton } from "@/components/google-auth-button"
 import { ButtonLink } from "@/components/ui/button-link"
 
 export const SignInForm = () => {
+    const router = useRouter()
+
+    const { isLoaded, signIn, setActive } = useSignIn()
+
     const [isGoogleLoading, setIsGoogleLoading] = useState(false)
 
     const [hidden, setHidden] = useState(true)
@@ -29,16 +35,29 @@ export const SignInForm = () => {
     const onSubmit = form.handleSubmit(async (data) => {
         setHidden(true)
 
+        if (!isLoaded) {
+            return
+        }
+
         try {
-            await new Promise((resolve) => setTimeout(resolve, 5000))
+            const result = await signIn.create({
+                identifier: data.email,
+                password: data.password,
+            })
 
-            return console.log(data)
-        } catch (error) {
-            console.log("Something went wrong.")
+            if (result.status === "complete") {
+                await setActive({
+                    session: result.createdSessionId,
+                })
 
-            console.log(error)
+                return router.push("/")
+            }
+        } catch (error: any) {
+            const errorMessage = error.errors?.[0]?.message || "Something went wrong."
 
-            throw new Error("Something went wrong.")
+            console.log(errorMessage)
+
+            throw new Error(errorMessage)
         }
     })
 
