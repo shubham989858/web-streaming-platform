@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { GoogleAuthButton } from "@/components/google-auth-button"
-import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
+import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 
 export const splitName = (fullName: string) => {
     const trimmedFullName = fullName.trim().replace(/\s+/g, " ")
@@ -106,6 +106,8 @@ export const SignUpForm = () => {
 
         try {
             localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
+
+            sessionStorage.setItem(SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY, "true")
 
             return await signUp.authenticateWithRedirect({
                 strategy: "oauth_google",

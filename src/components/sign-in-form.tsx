@@ -8,7 +8,7 @@ import { useState } from "react"
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 
-import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
+import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 import { signInFormSchema } from "@/lib/form-schemas"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -79,6 +79,8 @@ export const SignInForm = () => {
 
         try {
             localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
+
+            sessionStorage.setItem(SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY, "true")
 
             return await signIn.authenticateWithRedirect({
                 strategy: "oauth_google",
