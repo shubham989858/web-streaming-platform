@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { requestPasswordResetFormSchema } from "@/lib/form-schemas"
+import { RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 
 export const RequestPasswordResetForm = () => {
     const router = useRouter()
@@ -33,6 +34,8 @@ export const RequestPasswordResetForm = () => {
                 strategy: "reset_password_email_code",
                 identifier: data.email,
             })
+
+            sessionStorage.setItem(RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY, "true")
 
             return router.push("/reset-password")
         } catch (error: any) {

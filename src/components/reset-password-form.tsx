@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import { resetPassswordFormSchema } from "@/lib/form-schemas"
 import { PasswordInput } from "@/components/ui/password-input"
 import { ButtonLink } from "@/components/ui/button-link"
+import { RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 
 export const ResetPasswordForm = () => {
     const { signOut } = useClerk()
@@ -47,6 +48,8 @@ export const ResetPasswordForm = () => {
 
             if (result.status === "complete") {
                 await signOut()
+
+                sessionStorage.removeItem(RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY)
 
                 return router.push("/sign-in")
             }

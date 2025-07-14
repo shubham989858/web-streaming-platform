@@ -2,33 +2,30 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useSignUp } from "@clerk/nextjs"
 import { IconLoader2 } from "@tabler/icons-react"
 
-type VerifyEmailPageGuardProps = {
+import { RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY } from "@/constants"
+
+type ResetPasswordPageGuardProps = {
     children: React.ReactNode,
 }
 
-export const VerifyEmailPageGuard = ({
+export const ResetPasswordPageGuard = ({
     children,
-}: VerifyEmailPageGuardProps) => {
+}: ResetPasswordPageGuardProps) => {
     const router = useRouter()
-
-    const { isLoaded, signUp } = useSignUp()
 
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        if (!isLoaded) {
-            return
-        }
+        const resetPasswordFlowFlag = sessionStorage.getItem(RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY)
 
-        if (signUp.status !== "missing_requirements") {
-            return router.replace("/sign-up")
+        if (resetPasswordFlowFlag !== "true") {
+            return router.replace("/forgot-password")
         }
 
         setIsLoading(false)
-    }, [isLoaded, signUp])
+    }, [])
 
     if (isLoading) {
         return (
