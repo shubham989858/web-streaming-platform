@@ -1,12 +1,15 @@
-import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core"
+import { pgTable, text, timestamp, uniqueIndex } from "drizzle-orm/pg-core"
 import { createId } from "@paralleldrive/cuid2"
 
-export const articles = pgTable("articles", {
+export const users = pgTable("users", {
     id: text("id").primaryKey().notNull().unique().$defaultFn(() => createId()),
-    title: text("title").notNull(),
-    description: text("description"),
+    clerkUserId: text("clerk_user_id").notNull().unique(),
+    name: text("name"),
+    email: text("email").notNull().unique(),
+    imageUrl: text("image_url"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (t) => [
-    index("title_index").on(t.title),
+    uniqueIndex("clerk_user_id_index").on(t.clerkUserId),
+    uniqueIndex("email_index").on(t.email),
 ])
