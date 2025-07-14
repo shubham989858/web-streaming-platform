@@ -140,6 +140,7 @@ export const SignUpForm = () => {
                     )}
 
                 </Button>
+                <div className="hidden" id="clerk-captcha" />
             </div>
             <div className="flex items-center gap-x-2">
                 <div className="h-px flex-1 bg-zinc-700" />
