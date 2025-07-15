@@ -7,6 +7,7 @@ export const users = pgTable("users", {
     name: text("name"),
     email: text("email").notNull().unique(),
     imageUrl: text("image_url"),
+    stripeCustomerId: text("stripe_customer_id"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
 }, (t) => [
