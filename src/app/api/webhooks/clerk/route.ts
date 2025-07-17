@@ -47,8 +47,6 @@ export const POST = async (req: NextRequest) => {
         }
 
         if (event.type === "user.deleted") {
-            console.log("USER UPDATE EVENT...")
-
             const { data } = event
 
             if (!data.id) {

@@ -3,7 +3,8 @@ import { eq } from "drizzle-orm"
 import { db } from "@/db"
 import { users } from "@/db/schema"
 import { stripe } from "@/lib/stripe"
-import { createTRPCRouter, protectedProcedure } from "@/trpc/init"
+import { createTRPCRouter, protectedProcedure, subscriptionRequiredProcedure } from "@/trpc/init"
+import { STRIPE_SUBSCRIPTION_TRIAL_PERIOD_DAYS } from "@/constants"
 
 export const stripeRouter = createTRPCRouter({
     createCheckoutSession: protectedProcedure.mutation(async ({
@@ -43,12 +44,36 @@ export const stripeRouter = createTRPCRouter({
                 },
             ],
             mode: "subscription",
+            subscription_data: {
+                trial_period_days: STRIPE_SUBSCRIPTION_TRIAL_PERIOD_DAYS,
+            },
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/?succeed=true`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/?canceled=true`,
         })
 
         return {
             url: session.url,
+        }
+    }),
+    cancelSubscription: subscriptionRequiredProcedure.mutation(async ({
+        ctx,
+    }) => {
+        const { user } = ctx
+
+        const canceledSubscription = await stripe.subscriptions.update(user.stripeSubscriptionId || "", {
+            cancel_at_period_end: true,
+        })
+
+        await db.update(users).set({
+            stripeSubscriptionStatus: canceledSubscription.status,
+            stripeSubscriptionActive: canceledSubscription.status === "active" || canceledSubscription.status === "trialing",
+            stripeSubscriptionExpiresAt: new Date(canceledSubscription.items?.data?.[0]?.current_period_end * 1000),
+            updatedAt: new Date(),
+        }).where(eq(users.id, user.id))
+
+        return {
+            success: true,
+            message: "Subscription will be canceled at the end of the billing period.",
         }
     }),
 })

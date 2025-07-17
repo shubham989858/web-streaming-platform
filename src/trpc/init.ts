@@ -31,7 +31,7 @@ export const createTRPCRouter = t.router
 export const createCallerFactory = t.createCallerFactory
 export const baseProcedure = t.procedure
 
-export const protectedProcedure = t.procedure.use(async ({
+export const protectedProcedure = baseProcedure.use(async ({
     ctx,
     next,
 }) => {
@@ -56,5 +56,29 @@ export const protectedProcedure = t.procedure.use(async ({
             ...ctx,
             user: existingUser,
         },
+    })
+})
+
+export const subscriptionRequiredProcedure = protectedProcedure.use(async ({
+    ctx,
+    next,
+}) => {
+    const { user } = ctx
+
+    const isSubscriptionActive = user.stripeSubscriptionActive
+
+    const isSubscriptionStatusValid = user.stripeSubscriptionStatus === "active" || user.stripeSubscriptionStatus === "trialing"
+
+    const isNotSubscriptionExpired = !!user.stripeSubscriptionExpiresAt && new Date(user.stripeSubscriptionExpiresAt) >= new Date()
+
+    if (!user.stripeSubscriptionId || !isSubscriptionActive || !isSubscriptionStatusValid || !isNotSubscriptionExpired) {
+        throw new TRPCError({
+            code: "FORBIDDEN",
+            message: "Subscription plan is not active.",
+        })
+    }
+
+    return next({
+        ctx,
     })
 })
