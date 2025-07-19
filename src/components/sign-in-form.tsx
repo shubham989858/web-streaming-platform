@@ -8,7 +8,7 @@ import { useState } from "react"
 import { useSignIn } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 
-import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
+import { AFTER_SIGN_IN_REDIRECT_PATH, RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 import { signInFormSchema } from "@/lib/form-schemas"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -53,7 +53,7 @@ export const SignInForm = () => {
 
                 localStorage.removeItem(RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY)
 
-                return router.push("/")
+                return router.push(AFTER_SIGN_IN_REDIRECT_PATH)
             }
         } catch (error: any) {
             const errorMessage = error.errors?.[0]?.message || "Something went wrong."
@@ -85,7 +85,7 @@ export const SignInForm = () => {
             return await signIn.authenticateWithRedirect({
                 strategy: "oauth_google",
                 redirectUrl: "/sso-callback",
-                redirectUrlComplete: "/",
+                redirectUrlComplete: AFTER_SIGN_IN_REDIRECT_PATH,
             })
         } catch (error: any) {
             const errorMessage = error.errors?.[0]?.message || "Something went wrong."

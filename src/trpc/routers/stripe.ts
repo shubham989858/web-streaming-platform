@@ -1,16 +1,30 @@
 import { eq } from "drizzle-orm"
+import { TRPCError } from "@trpc/server"
 
 import { db } from "@/db"
 import { users } from "@/db/schema"
 import { stripe } from "@/lib/stripe"
-import { createTRPCRouter, protectedProcedure, subscriptionRequiredProcedure } from "@/trpc/init"
+import { createTRPCRouter, subscriptionNotActiveProcedure, subscriptionRequiredProcedure } from "@/trpc/init"
 import { STRIPE_SUBSCRIPTION_TRIAL_PERIOD_DAYS } from "@/constants"
 
 export const stripeRouter = createTRPCRouter({
-    createCheckoutSession: protectedProcedure.mutation(async ({
+    createCheckoutSession: subscriptionNotActiveProcedure.mutation(async ({
         ctx,
     }) => {
         const { user } = ctx
+
+        const isSubscriptionActive = user.stripeSubscriptionActive
+
+        const isSubscriptionStatusValid = user.stripeSubscriptionStatus === "active" || user.stripeSubscriptionStatus === "trialing"
+
+        const isNotSubscriptionExpired = !!user.stripeSubscriptionExpiresAt && new Date(user.stripeSubscriptionExpiresAt) >= new Date()
+
+        if (!!user.stripeSubscriptionId || isSubscriptionActive || isSubscriptionStatusValid || isNotSubscriptionExpired) {
+            throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: "Subscription plan is already active.",
+            })
+        }
 
         let customerId = user.stripeCustomerId
 
@@ -44,8 +58,17 @@ export const stripeRouter = createTRPCRouter({
                 },
             ],
             mode: "subscription",
-            subscription_data: {
+            subscription_data: !user.stripeCustomerId && user.stripeSubscriptionStatus === "none" ? {
                 trial_period_days: STRIPE_SUBSCRIPTION_TRIAL_PERIOD_DAYS,
+                metadata: {
+                    clerkUserId: user.clerkUserId,
+                    userId: user.id,
+                },
+            } : {
+                metadata: {
+                    clerkUserId: user.clerkUserId,
+                    userId: user.id,
+                },
             },
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/?succeed=true`,
             cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/?canceled=true`,
@@ -59,6 +82,15 @@ export const stripeRouter = createTRPCRouter({
         ctx,
     }) => {
         const { user } = ctx
+
+        const subscription = await stripe.subscriptions.retrieve(user.stripeSubscriptionId || "")
+
+        if (!!subscription && subscription.cancel_at_period_end) {
+            throw new TRPCError({
+                code: "BAD_REQUEST",
+                message: "Subscription is already scheduled to be canceled after period ends.",
+            })
+        }
 
         const canceledSubscription = await stripe.subscriptions.update(user.stripeSubscriptionId || "", {
             cancel_at_period_end: true,

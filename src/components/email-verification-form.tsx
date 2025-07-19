@@ -9,7 +9,7 @@ import { useSignUp } from "@clerk/nextjs"
 import { useRouter } from "next/navigation"
 import { useLocalStorage } from "usehooks-ts"
 
-import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
+import { AFTER_SIGN_UP_REDIRECT_PATH, RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY } from "@/constants"
 import { emailVerificationFormSchema } from "@/lib/form-schemas"
 import { SecurityCodeInput } from "@/components/ui/security-code-input"
 import { Button } from "@/components/ui/button"
@@ -49,7 +49,7 @@ export const EmailVerificationForm = () => {
                     session: result.createdSessionId,
                 })
 
-                return router.push("/")
+                return router.push(AFTER_SIGN_UP_REDIRECT_PATH)
             }
         } catch (error: any) {
             const errorMessage = error.errors?.[0]?.message || "Something went wrong."

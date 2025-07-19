@@ -5,3 +5,7 @@ export const RESET_PASSWORD_FLOW_SESSION_STORAGE_KEY = "reset-password-flow"
 export const SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY = "sso-callback-flow"
 
 export const STRIPE_SUBSCRIPTION_TRIAL_PERIOD_DAYS = 30
+
+export const AFTER_SIGN_IN_REDIRECT_PATH = "/"
+
+export const AFTER_SIGN_UP_REDIRECT_PATH = "/"

@@ -47,6 +47,28 @@ export const POST = async (req: NextRequest) => {
             }).where(eq(users.id, existingUser.id))
         }
 
+        if (event.type === "customer.subscription.created") {
+            const subscription = event.data.object as Stripe.Subscription
+
+            const customerId = subscription.customer as string
+
+            const [existingUser] = await db.select().from(users).where(eq(users.stripeCustomerId, customerId))
+
+            if (!existingUser) {
+                return new NextResponse("User not found.", {
+                    status: 404,
+                })
+            }
+
+            await db.update(users).set({
+                stripeSubscriptionId: subscription.id,
+                stripeSubscriptionActive: subscription.status === "active" || subscription.status === "trialing",
+                stripeSubscriptionStatus: subscription.status,
+                stripeSubscriptionExpiresAt: new Date(subscription.items?.data?.[0]?.current_period_end * 1000),
+                updatedAt: new Date(),
+            }).where(eq(users.id, existingUser.id))
+        }
+
         if (event.type === "customer.subscription.updated") {
             const subscription = event.data.object as Stripe.Subscription
 
@@ -82,6 +104,7 @@ export const POST = async (req: NextRequest) => {
             }
 
             await db.update(users).set({
+                stripeSubscriptionId: null,
                 stripeSubscriptionStatus: subscription.status as any,
                 stripeSubscriptionActive: false,
                 stripeSubscriptionExpiresAt: null,

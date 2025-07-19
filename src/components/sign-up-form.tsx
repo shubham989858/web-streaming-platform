@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { PasswordInput } from "@/components/ui/password-input"
 import { GoogleAuthButton } from "@/components/google-auth-button"
-import { RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
+import { AFTER_SIGN_UP_REDIRECT_PATH, RESEND_EMAIL_VERIFICATION_CODE_COOLDOWN_TIMER_LOCAL_STORAGE_KEY, SSO_CALLBACK_FLOW_SESSION_STORAGE_KEY } from "@/constants"
 
 export const splitName = (fullName: string) => {
     const trimmedFullName = fullName.trim().replace(/\s+/g, " ")
@@ -112,7 +112,7 @@ export const SignUpForm = () => {
             return await signUp.authenticateWithRedirect({
                 strategy: "oauth_google",
                 redirectUrl: "/sso-callback",
-                redirectUrlComplete: "/",
+                redirectUrlComplete: AFTER_SIGN_UP_REDIRECT_PATH,
             })
         } catch (error: any) {
             const errorMessage = error.errors?.[0]?.message || "Something went wrong."
