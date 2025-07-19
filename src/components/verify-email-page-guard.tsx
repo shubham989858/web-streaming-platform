@@ -32,7 +32,7 @@ export const VerifyEmailPageGuard = ({
 
     if (isLoading) {
         return (
-            <IconLoader2 className="size-8 mx-auto transition-all animate-spin" />
+            <IconLoader2 className="size-8 mx-auto animate-spin" />
         )
     }
 

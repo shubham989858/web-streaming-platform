@@ -8,7 +8,7 @@ const SSOCallbackPage = () => {
         <SSOCallbackPageGuard>
             <AuthenticateWithRedirectCallback />
             <div className="hidden" id="clerk-captcha" />
-            <IconLoader2 className="mx-auto size-8 transition-all animate-spin" />
+            <IconLoader2 className="mx-auto size-8 animate-spin" />
         </SSOCallbackPageGuard>
     )
 }

@@ -20,7 +20,7 @@ export const GoogleAuthButton = ({
         <Button className="w-full" size="lg" type="button" disabled={disabled} onClick={onClick}>
 
             {showSpinner ? (
-                <IconLoader2 className="size-6 animate-spin transition-all" />
+                <IconLoader2 className="size-6 animate-spin" />
             ) : (
                 <>
                     <FcGoogle className="size-6" />

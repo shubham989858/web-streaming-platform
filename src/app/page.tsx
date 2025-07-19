@@ -37,7 +37,7 @@ const HomePage = () => {
       <Button size="lg" disabled={createCheckoutSession.isPending} onClick={() => createCheckoutSession.mutate()}>
 
         {createCheckoutSession.isPending ? (
-          <IconLoader2 className="size-6 animate-spin transition-all" />
+          <IconLoader2 className="size-6 animate-spin" />
         ) : (
           "Demo subscribe button"
         )}
@@ -46,7 +46,7 @@ const HomePage = () => {
       <Button size="lg" disabled={cancelSubscription.isPending} onClick={() => cancelSubscription.mutate()}>
 
         {cancelSubscription.isPending ? (
-          <IconLoader2 className="size-6 animate-spin transition-all" />
+          <IconLoader2 className="size-6 animate-spin" />
         ) : (
           "Demo cancel subscription button"
         )}

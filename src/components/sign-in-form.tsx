@@ -106,7 +106,7 @@ export const SignInForm = () => {
                 <Button className="w-full" size="lg" variant="primary" type="submit" disabled={form.formState.isSubmitting || isGoogleLoading}>
 
                     {form.formState.isSubmitting ? (
-                        <IconLoader2 className="size-6 animate-spin transition-all" />
+                        <IconLoader2 className="size-6 animate-spin" />
                     ) : (
                         "Sign in"
                     )}

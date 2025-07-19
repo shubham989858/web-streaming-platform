@@ -112,7 +112,7 @@ export const EmailVerificationForm = () => {
             <Button className="w-full" size="lg" variant="primary" type="submit" disabled={form.formState.isSubmitting || isLoading}>
 
                 {form.formState.isSubmitting ? (
-                    <IconLoader2 className="size-6 animate-spin transition-all" />
+                    <IconLoader2 className="size-6 animate-spin" />
                 ) : (
                     "Verify email"
                 )}
@@ -121,7 +121,7 @@ export const EmailVerificationForm = () => {
             <Button className="w-full" size="lg" variant="ghost" type="button" disabled={form.formState.isSubmitting || isLoading || cooldown > 0} onClick={onClick}>
 
                 {isLoading ? (
-                    <IconLoader2 className="size-6 animate-spin transition-all" />
+                    <IconLoader2 className="size-6 animate-spin" />
                 ) : cooldown > 0 ? (
                     `Resend in ${cooldown}s`
                 ) : (
